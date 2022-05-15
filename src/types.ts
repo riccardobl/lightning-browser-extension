@@ -204,6 +204,7 @@ export type Transaction = {
   totalFees: string;
   description: string;
   location: string;
+  totalAmountFiat: string;
 };
 
 export type Payment = {
