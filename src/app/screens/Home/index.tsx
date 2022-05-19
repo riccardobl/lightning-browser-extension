@@ -14,7 +14,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import browser from "webextension-polyfill";
-import { useCurreny } from "~/app/context/CurrencyContext";
+import { useCurrency } from "~/app/context/CurrencyContext";
 import api from "~/common/lib/api";
 import type { Allowance, Battery, Transaction } from "~/types";
 
@@ -28,7 +28,7 @@ function Home() {
   const [loadingSendSats, setLoadingSendSats] = useState(false);
   const [lnData, setLnData] = useState<Battery[]>([]);
   const navigate = useNavigate();
-  const { getFiatValue } = useCurreny();
+  const { getFiatValue } = useCurrency();
 
   async function loadAllowance() {
     try {
