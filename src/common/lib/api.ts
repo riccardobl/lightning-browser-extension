@@ -16,12 +16,11 @@ import {
   MakeInvoiceResponse,
 } from "~/extension/background-script/connectors/connector.interface";
 
-// TODO: might be teh same as AccountInfo btu with currentAccountId
-interface AccountInfoRes {
+export interface AccountInfoRes {
+  balance: { balance: string | number };
   currentAccountId: string;
-  name: string;
   info: { alias: string };
-  balance: { balance: string };
+  name: string;
 }
 
 interface StatusRes {
@@ -56,10 +55,11 @@ export const swrGetAccountInfo = async (
     // Update account info with most recent data, save to cache.
     getAccountInfo()
       .then((response) => {
-        console.log("getAccountInfo - response", response);
         const { alias } = response.info;
+        const { balance: resBalance } = response.balance;
         const name = response.name;
-        const balance = parseInt(response.balance.balance); // TODO: handle amounts
+        const balance =
+          typeof resBalance === "number" ? resBalance : parseInt(resBalance); // TODO: handle amounts
         const account = { id, name, alias, balance };
         storeAccounts({
           ...accountsCache,
