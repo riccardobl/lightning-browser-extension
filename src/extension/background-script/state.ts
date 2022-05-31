@@ -10,17 +10,18 @@ import type { Account, Accounts, SettingsStorage } from "~/types";
 import i18n from "~/i18n/i18nConfig";
 
 interface State {
-  connector: Connector | null;
   account: Account | null;
-  settings: SettingsStorage;
   accounts: Accounts;
+  connector: Connector | null;
   currentAccountId: string | null;
-  password: string | null;
   getAccount: () => Account | null;
   getConnector: () => Promise<Connector>;
-  lock: () => Promise<void>;
   init: () => Promise<void>;
+  isUnlocked: () => boolean;
+  lock: () => Promise<void>;
+  password: string | null;
   saveToStorage: () => Promise<void>;
+  settings: SettingsStorage;
 }
 
 interface BrowserStorage {
