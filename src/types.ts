@@ -84,7 +84,7 @@ export interface MessageDefault {
 }
 
 export interface MessageAccountDelete extends MessageDefault {
-  args: { id: Account["id"] };
+  args?: { id: Account["id"] };
   type: "deleteAccount";
 }
 export interface MessageAccountAdd extends MessageDefault {

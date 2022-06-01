@@ -1,9 +1,13 @@
-import utils from "./utils";
 import {
   getAccountsCache,
   removeAccountFromCache,
   storeAccounts,
 } from "./cache";
+import utils from "./utils";
+import {
+  MakeInvoiceArgs,
+  MakeInvoiceResponse,
+} from "~/extension/background-script/connectors/connector.interface";
 import type {
   Accounts,
   AccountInfo,
@@ -11,10 +15,6 @@ import type {
   Transaction,
   SettingsStorage,
 } from "~/types";
-import {
-  MakeInvoiceArgs,
-  MakeInvoiceResponse,
-} from "~/extension/background-script/connectors/connector.interface";
 
 export interface AccountInfoRes {
   balance: { balance: string | number };
@@ -33,7 +33,8 @@ interface UnlockRes {
   currentAccountId: string;
 }
 
-export const getAccountInfo = () => utils.call<AccountInfoRes>("accountInfo");
+export const getAccountInfo = () =>
+  utils.call<AccountInfoRes | { error: string }>("accountInfo");
 
 /**
  * stale-while-revalidate get account info
@@ -55,6 +56,9 @@ export const swrGetAccountInfo = async (
     // Update account info with most recent data, save to cache.
     getAccountInfo()
       .then((response) => {
+        if ("error" in response) {
+          throw new Error(response.error);
+        }
         const { alias } = response.info;
         const { balance: resBalance } = response.balance;
         const name = response.name;
