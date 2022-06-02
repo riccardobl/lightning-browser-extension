@@ -110,6 +110,10 @@ export interface MessageAccountAll extends Omit<MessageDefault, "args"> {
 export interface MessageAccountLock extends Omit<MessageDefault, "args"> {
   type: "lock";
 }
+export interface MessageAccountSelect extends MessageDefault {
+  args: { id: Account["id"] };
+  type: "selectAccount";
+}
 
 interface LNURLChannelServiceResponse {
   uri: string; // Remote node address of form node_key@ip_address:port_number
