@@ -35,7 +35,9 @@ class DB extends Dexie {
         "allowances",
         "payments",
       ]);
-      console.log("Loading DB data from storage");
+
+      console.info("Loading DB data from storage");
+
       if (result.allowances) {
         await this.allowances.bulkAdd(result.allowances);
       }
@@ -44,8 +46,7 @@ class DB extends Dexie {
       }
       return true;
     } catch (e) {
-      console.log("Failed to load DB data from storage");
-      console.log(e);
+      console.error("Failed to load DB data from storage", e);
     }
   }
 }
