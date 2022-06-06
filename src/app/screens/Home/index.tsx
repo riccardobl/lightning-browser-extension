@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import browser from "webextension-polyfill";
 import { useCurrency } from "~/app/context/CurrencyContext";
 import api from "~/common/lib/api";
+import { getFiatValue } from "~/common/utils/currencyConvert";
 import type { Allowance, Battery, Transaction } from "~/types";
 
 dayjs.extend(relativeTime);
@@ -28,7 +29,6 @@ function Home() {
   const [loadingSendSats, setLoadingSendSats] = useState(false);
   const [lnData, setLnData] = useState<Battery[]>([]);
   const navigate = useNavigate();
-  const { getFiatValue } = useCurrency();
 
   async function loadAllowance() {
     try {
