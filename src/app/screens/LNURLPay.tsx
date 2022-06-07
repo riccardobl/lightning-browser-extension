@@ -380,7 +380,6 @@ function LNURLPay(props: Props) {
                       value={valueSat}
                       onChange={(e) => setValueSat(e.target.value)}
                       secondaryValue={fiatValue}
-                      endAdornment={<div />}
                     />
                     <SatButtons onClick={setValueSat} />
                   </div>
