@@ -30,6 +30,7 @@ jobs:
         with:
           cmd: build:chrome # will run `yarn build` command
 
+
       - name: Test Code
         uses: mujo-code/puppeteer-headful@v2
         env:
