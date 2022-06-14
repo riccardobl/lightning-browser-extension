@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - timeout
   pull_request:
     types: [opened, synchronize]
 
@@ -29,6 +30,11 @@ jobs:
         uses: borales/actions-yarn@v3.0.0
         with:
           cmd: build:chrome # will run `yarn build` command
+
+      - name: Build Dev
+        uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: build-dev:chrome 
 
       - name: Test Code
         uses: mujo-code/puppeteer-headful@v2
