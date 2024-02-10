@@ -11,7 +11,10 @@ const makeInvoice = async (message: MessageMakeInvoice) => {
   const memo = message.args.memo || message.args.defaultMemo || "Alby invoice";
 
   if (message.args.amount) {
-    amount = parseInt(message.args.amount);
+    amount = Number(message.args.amount);
+    if (isNaN(amount) || amount <= 0 || !isFinite(amount)) {
+      return { error: "Invalid amount" };
+    }
     const connector = await state.getState().getConnector();
 
     try {

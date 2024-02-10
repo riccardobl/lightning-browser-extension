@@ -25,6 +25,8 @@ export interface ConnectorTransaction {
   } & Record<string, string>;
   id: string;
   memo?: string;
+  currency?: string;
+  currencyAmount?: number;
   preimage: string;
   payment_hash?: string;
   settled: boolean;

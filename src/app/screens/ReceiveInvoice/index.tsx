@@ -244,8 +244,28 @@ function ReceiveInvoice() {
                       id="amount"
                       min={0}
                       label={t("amount.label")}
-                      placeholder={t("amount.placeholder")}
-                      fiatValue={fiatAmount}
+                      step={
+                        !auth.account || auth.account.currency === "BTC"
+                          ? 1
+                          : 0.01
+                      }
+                      placeholder={
+                        !auth.account ||
+                        !auth.account.currency ||
+                        auth.account.currency === "BTC"
+                          ? t("amount.placeholder")
+                          : t("amount.label") +
+                            " (" +
+                            auth.account.currency +
+                            ")"
+                      }
+                      fiatValue={
+                        !auth.account ||
+                        !auth.account.currency ||
+                        auth.account.currency === "BTC"
+                          ? fiatAmount
+                          : ""
+                      }
                       onChange={handleChange}
                       autoFocus
                     />

@@ -728,6 +728,7 @@ export type Transaction = {
   title: string | React.ReactNode;
   totalAmount: Allowance["payments"][number]["totalAmount"];
   totalAmountFiat?: string;
+  currencyAmount?: number;
   totalFees?: Allowance["payments"][number]["totalFees"];
   type?: "sent" | "received";
   value?: string;
@@ -895,6 +896,8 @@ export interface Invoice {
   settled: boolean;
   settleDate: number;
   totalAmount: number;
+  currency?: string;
+  currencyAmount?: number;
   totalAmountFiat?: string;
   preimage: string;
   paymentHash?: string;

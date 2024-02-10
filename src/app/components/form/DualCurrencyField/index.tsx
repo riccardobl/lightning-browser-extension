@@ -22,6 +22,7 @@ export default function DualCurrencyField({
   required = false,
   pattern,
   title,
+  step,
   onChange,
   onFocus,
   onBlur,
@@ -53,6 +54,7 @@ export default function DualCurrencyField({
         "block w-full placeholder-gray-500 dark:placeholder-gray-600 dark:text-white ",
         "px-0 border-0 focus:ring-0 bg-transparent"
       )}
+      step={step}
       placeholder={placeholder}
       required={required}
       pattern={pattern}

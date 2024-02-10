@@ -215,6 +215,7 @@ class Galoy implements Connector {
           const transactionType: "received" | "sent" =
             tx.direction === "RECEIVE" ? "received" : "sent";
           // Do not display a double negative if sent
+          const currencyAmount = Math.abs(tx.settlementAmount) / 100;
           let absSettlementAmount = Math.abs(tx.settlementAmount);
           // Convert createdAt from UNIX timestamp to Date
           const createdAtDate = new Date(tx.createdAt * 1000);
@@ -235,7 +236,9 @@ class Galoy implements Connector {
             payment_hash: tx.initiationVia.paymentHash || "",
             settled: tx.status === "SUCCESS",
             settleDate: createdAtDate.getTime(),
-            totalAmount: absSettlementAmount, // Assuming this is in the correct unit
+            totalAmount: absSettlementAmount,
+            currencyAmount,
+            currency: currency,
             type: transactionType,
           });
         }
@@ -504,9 +507,9 @@ class Galoy implements Connector {
     const currency = this.config.currency || "BTC";
 
     let amount = Number(args.amount);
+
     if (currency !== "BTC") {
-      const rate = await getCurrencyRateWithCache(CURRENCIES[currency]);
-      amount = this.toFiatInt(amount * rate, currency);
+      amount = this.toFiatInt(amount, currency);
     }
 
     const query = {

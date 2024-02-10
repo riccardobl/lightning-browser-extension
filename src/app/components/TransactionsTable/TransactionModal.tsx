@@ -82,7 +82,11 @@ export default function TransactionModal({
               )}
             >
               {transaction.type == "sent" ? "-" : "+"}{" "}
-              {getFormattedSats(transaction.totalAmount)}
+              {!transaction.currency ||
+              transaction.currency === "BTC" ||
+              !transaction.currencyAmount
+                ? getFormattedSats(transaction.totalAmount)
+                : transaction.currencyAmount + " " + transaction.currency}
             </p>
 
             {!!transaction.totalAmountFiat && (

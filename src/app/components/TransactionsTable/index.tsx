@@ -93,7 +93,11 @@ export default function TransactionsTable({
                         )}
                       >
                         {type == "outgoing" ? "-" : "+"}{" "}
-                        {getFormattedSats(tx.totalAmount)}
+                        {!tx.currency ||
+                        tx.currency === "BTC" ||
+                        !tx.currencyAmount
+                          ? getFormattedSats(tx.totalAmount)
+                          : tx.currencyAmount + " " + tx.currency}
                       </p>
 
                       {!!tx.totalAmountFiat && (
