@@ -82,7 +82,9 @@ export default function TransactionModal({
               )}
             >
               {transaction.type == "sent" ? "-" : "+"}{" "}
-              {getFormattedSats(transaction.totalAmount)}
+              {!transaction.displayAmount
+                ? getFormattedSats(transaction.totalAmount)
+                : transaction.displayAmount}
             </p>
 
             {!!transaction.totalAmountFiat && (

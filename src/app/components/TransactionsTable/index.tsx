@@ -93,7 +93,9 @@ export default function TransactionsTable({
                         )}
                       >
                         {type == "outgoing" ? "-" : "+"}{" "}
-                        {getFormattedSats(tx.totalAmount)}
+                        {!tx.displayAmount
+                          ? getFormattedSats(tx.totalAmount)
+                          : tx.displayAmount}
                       </p>
 
                       {!!tx.totalAmountFiat && (
