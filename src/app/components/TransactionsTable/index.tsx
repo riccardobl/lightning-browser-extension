@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import TransactionModal from "~/app/components/TransactionsTable/TransactionModal";
+import { useAccount } from "~/app/context/AccountContext";
 import { useSettings } from "~/app/context/SettingsContext";
 import { classNames } from "~/app/utils";
 import { Transaction } from "~/types";
@@ -23,9 +24,11 @@ export default function TransactionsTable({
   noResultMsg,
   loading = false,
 }: Props) {
-  const { getFormattedSats } = useSettings();
+  const { getFormattedInCurrency } = useSettings();
   const [modalOpen, setModalOpen] = useState(false);
   const [transaction, setTransaction] = useState<Transaction | undefined>();
+  const auth = useAccount();
+
   const { t } = useTranslation("components", {
     keyPrefix: "transactions_table",
   });
@@ -93,7 +96,12 @@ export default function TransactionsTable({
                         )}
                       >
                         {type == "outgoing" ? "-" : "+"}{" "}
-                        {getFormattedSats(tx.totalAmount)}
+                        {getFormattedInCurrency(
+                          tx.totalAmount,
+                          !tx.publisherLink && auth?.account?.currency
+                            ? auth.account.currency
+                            : "BTC"
+                        )}
                       </p>
 
                       {!!tx.totalAmountFiat && (

@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "~/app/components/Toast";
+import { useAccount } from "~/app/context/AccountContext";
 import { useSettings } from "~/app/context/SettingsContext";
 import { convertPaymentsToTransactions } from "~/app/utils/payments";
 import msg from "~/common/lib/msg";
@@ -29,6 +30,7 @@ function PublisherDetail() {
   const [transactions, setTransactions] = useState<Transaction[] | undefined>();
   const { id } = useParams();
   const navigate = useNavigate();
+  const auth = useAccount();
 
   const fetchData = useCallback(async () => {
     try {
@@ -43,9 +45,11 @@ function PublisherDetail() {
         );
 
         for (const payment of _transactions) {
-          payment.totalAmountFiat = settings.showFiat
-            ? await getFormattedFiat(payment.totalAmount)
-            : "";
+          payment.totalAmountFiat =
+            settings.showFiat &&
+            (!auth.account?.currency || auth.account?.currency == "BTC")
+              ? await getFormattedFiat(payment.totalAmount)
+              : "";
         }
         setTransactions(_transactions);
       }
@@ -53,7 +57,7 @@ function PublisherDetail() {
       console.error(e);
       if (e instanceof Error) toast.error(`Error: ${e.message}`);
     }
-  }, [id, settings.showFiat, getFormattedFiat]);
+  }, [id, settings.showFiat, getFormattedFiat, auth]);
 
   useEffect(() => {
     // Run once.

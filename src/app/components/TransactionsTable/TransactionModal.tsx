@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Hyperlink from "~/app/components/Hyperlink";
 import Modal from "~/app/components/Modal";
+import { useAccount } from "~/app/context/AccountContext";
 import { useSettings } from "~/app/context/SettingsContext";
 import { classNames } from "~/app/utils";
 import { Transaction } from "~/types";
@@ -31,7 +32,8 @@ export default function TransactionModal({
     keyPrefix: "transactions_table",
   });
   const [showMoreFields, setShowMoreFields] = useState(false);
-  const { getFormattedSats } = useSettings();
+  const { getFormattedSats, getFormattedInCurrency } = useSettings();
+  const auth = useAccount();
 
   function toggleShowMoreFields() {
     setShowMoreFields(!showMoreFields);
@@ -82,7 +84,12 @@ export default function TransactionModal({
               )}
             >
               {transaction.type == "sent" ? "-" : "+"}{" "}
-              {getFormattedSats(transaction.totalAmount)}
+              {getFormattedInCurrency(
+                transaction.totalAmount,
+                !transaction.publisherLink && auth?.account?.currency
+                  ? auth.account.currency
+                  : "BTC"
+              )}
             </p>
 
             {!!transaction.totalAmountFiat && (

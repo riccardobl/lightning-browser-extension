@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { useCallback, useState } from "react";
 import toast from "~/app/components/Toast";
+import { useAccount } from "~/app/context/AccountContext";
 import { useSettings } from "~/app/context/SettingsContext";
 import api from "~/common/lib/api";
 import { Transaction } from "~/types";
@@ -9,6 +10,7 @@ export const useTransactions = () => {
   const { settings, getFormattedFiat } = useSettings();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoadingTransactions, setIsLoadingTransactions] = useState(true);
+  const auth = useAccount();
 
   const loadTransactions = useCallback(
     async (limit?: number) => {
@@ -27,9 +29,11 @@ export const useTransactions = () => {
         );
 
         for (const transaction of transactions) {
-          transaction.totalAmountFiat = settings.showFiat
-            ? await getFormattedFiat(transaction.totalAmount)
-            : "";
+          transaction.totalAmountFiat =
+            settings.showFiat &&
+            (!auth.account?.currency || auth.account?.currency == "BTC")
+              ? await getFormattedFiat(transaction.totalAmount)
+              : "";
         }
 
         setTransactions(transactions);
@@ -39,7 +43,7 @@ export const useTransactions = () => {
         if (e instanceof Error) toast.error(`Error: ${e.message}`);
       }
     },
-    [settings, getFormattedFiat]
+    [settings, getFormattedFiat, auth]
   );
 
   return {

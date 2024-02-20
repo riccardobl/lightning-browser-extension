@@ -11,6 +11,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { FC, useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import toast from "~/app/components/Toast";
+import { useAccount } from "~/app/context/AccountContext";
 import { useSettings } from "~/app/context/SettingsContext";
 import { PublisherLnData } from "~/app/screens/Home/PublisherLnData";
 import { convertPaymentsToTransactions } from "~/app/utils/payments";
@@ -41,6 +42,7 @@ const AllowanceView: FC<Props> = (props) => {
 
   const showFiat = !isLoadingSettings && settings.showFiat;
   const hasTransactions = !isLoadingTransactions && !!transactions?.length;
+  const auth = useAccount();
 
   // get array of payments if not done yet
   useEffect(() => {
@@ -53,9 +55,11 @@ const AllowanceView: FC<Props> = (props) => {
       try {
         // attach fiatAmount if enabled
         for (const transaction of transactions) {
-          transaction.totalAmountFiat = showFiat
-            ? await getFormattedFiat(transaction.totalAmount)
-            : "";
+          transaction.totalAmountFiat =
+            showFiat &&
+            (!auth.account?.currency || auth.account?.currency == "BTC")
+              ? await getFormattedFiat(transaction.totalAmount)
+              : "";
         }
 
         setTransactions(transactions);
@@ -71,6 +75,7 @@ const AllowanceView: FC<Props> = (props) => {
   }, [
     props.allowance,
     isLoadingSettings,
+    auth,
     transactions,
     getFormattedFiat,
     showFiat,
