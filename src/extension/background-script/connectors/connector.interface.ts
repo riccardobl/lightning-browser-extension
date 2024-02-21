@@ -30,7 +30,7 @@ export interface ConnectorTransaction {
   settled: boolean;
   settleDate: number;
   totalAmount: number;
-  displayAmount?: string;
+  displayAmount?: [number, ACCOUNT_CURRENCIES];
   type: "received" | "sent";
 }
 

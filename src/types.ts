@@ -727,7 +727,7 @@ export type Transaction = {
   preimage: string;
   title: string | React.ReactNode;
   totalAmount: Allowance["payments"][number]["totalAmount"];
-  displayAmount?: string;
+  displayAmount?: [number, ACCOUNT_CURRENCIES];
   totalAmountFiat?: string;
   totalFees?: Allowance["payments"][number]["totalFees"];
   type?: "sent" | "received";
@@ -897,6 +897,7 @@ export interface Invoice {
   settleDate: number;
   totalAmount: number;
   totalAmountFiat?: string;
+  displayAmount?: [number, ACCOUNT_CURRENCIES];
   preimage: string;
   paymentHash?: string;
   custom_records?: ConnectorTransaction["custom_records"];

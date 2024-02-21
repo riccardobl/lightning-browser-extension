@@ -216,14 +216,15 @@ class Galoy implements Connector {
           const currency = targetWallet.walletCurrency || "BTC";
           // Do not display a double negative if sent
           let absSettlementAmount = Math.abs(tx.settlementAmount);
-          let displayAmount = undefined;
+          let displayAmount: [number, ACCOUNT_CURRENCIES] | undefined =
+            undefined;
           if (currency !== "BTC") {
             const rate = await getCurrencyRateWithCache(CURRENCIES[currency]);
             absSettlementAmount = this.toFiatFloat(
               absSettlementAmount,
               currency
             );
-            displayAmount = absSettlementAmount.toFixed(2) + " " + currency;
+            displayAmount = [absSettlementAmount, CURRENCIES[currency]];
             absSettlementAmount = Math.floor(absSettlementAmount / rate);
           }
 
